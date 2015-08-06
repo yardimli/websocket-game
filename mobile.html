@@ -1,61 +1,93 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="Content-Language" content="en-us">
-<meta name="title" content="Video Now!">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="Content-Language" content="en-us">
+	<meta name="title" content="Video Now!">
 
-<meta name="viewport" content="width=device-width,target-densitydpi=device-dpi,initial-scale=1.0, user-scalable=yes, minimum-scale=0.50, maximum-scale=1.5">
+	<meta name="viewport" content="width=device-width,target-densitydpi=device-dpi,initial-scale=1.0, user-scalable=yes, minimum-scale=0.50, maximum-scale=1.5">
 
-<title>Phone - Game Controller</title>
+	<title>Phone - Game Controller</title>
 
-<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
 
-<script src="gameclient.js"></script>
+	<script src="gameclient.js"></script>
 
 </head>
 
 <BODY>
 
-<style>
-* { font-family:tahoma; font-size:12px; padding:0px; margin:0px; }
-p { line-height:18px; }
-#content { padding:5px; background:#ddd; border-radius:5px; overflow-y: scroll;
-		   border:1px solid #CCC; margin-top:10px; height: 160px; width:350px;  }
-#input { border-radius:2px; border:1px solid #ccc;
-		 margin-top:10px; padding:5px; width:230px;  }
-#status { width:88px; display:block; float:left; margin-top:15px; }
-</style>
+	<style>
+		* {
+			font-family: tahoma;
+			font-size: 12px;
+			padding: 0px;
+			margin: 0px;
+		}
 
-<div style="display:inline-block; vertical-align:top">
-	<div id="content"></div>
-	<div>
-		<span id="status">Connecting...</span>
-		<input type="text" id="input" disabled="disabled" />
-	</div>
+		p {
+			line-height: 18px;
+		}
 
-	<div <div id="yes">
-		<div class="box" id="accel">
-			<span class="head">Accelerometer</span>:
-			<span id="xlabel"></span>,
-			<span id="ylabel"></span>,
-			<span id="zlabel"></span>,
-			<span id="ilabel"></span>,
-			<span id="arAlphaLabel"></span>,
-			<span id="arBetaLabel"></span>,
-			<span id="arGammaLabel"></span>
+		#content {
+			padding: 5px;
+			background: #ddd;
+			border-radius: 5px;
+			overflow-y: scroll;
+			border: 1px solid #CCC;
+			margin-top: 10px;
+			height: 160px;
+			width: 350px;
+		}
+
+		#input {
+			border-radius: 2px;
+			border: 1px solid #ccc;
+			margin-top: 10px;
+			padding: 5px;
+			width: 230px;
+		}
+
+		#status {
+			width: 88px;
+			display: block;
+			float: left;
+			margin-top: 15px;
+		}
+
+	</style>
+
+	<div style="display:inline-block; vertical-align:top">
+		<div id="content"></div>
+		<div>
+			<span id="status">Connecting...</span>
+			<input type="text" id="input" disabled="disabled" />
 		</div>
 
-		<div class="box" id="gyro">
-			<span class="head">Gyroscope</span>:
-			<span id="alphalabel"></span>,
-			<span id="betalabel"></span>,
-			<span id="gammalabel"></span>
+		<div <div id="yes">
+			<div class="box" id="accel">
+				<span class="head">Accelerometer</span>:
+				<span id="xlabel"></span>,
+				<span id="ylabel"></span>,
+				<span id="zlabel"></span>,
+				<span id="ilabel"></span>,
+				<span id="arAlphaLabel"></span>,
+				<span id="arBetaLabel"></span>,
+				<span id="arGammaLabel"></span>
+			</div>
+
+			<div class="box" id="gyro">
+				<span class="head">Gyroscope</span>:
+				<span id="alphalabel"></span>,
+				<span id="betalabel"></span>,
+				<span id="gammalabel"></span>
+			</div>
 		</div>
 	</div>
-</div>
 
-<canvas id="myCanvas" width="600" height="300" style="border:1px solid #000000;"></canvas>
+	<canvas id="myCanvas" width="600" height="300" style="border:1px solid #000000;"></canvas>
 
 </body>
+
 </html>

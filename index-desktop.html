@@ -1,32 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-<meta http-equiv="Content-Type" content="text/html, charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="Content-Language" content="en-us">
-<meta name="title" content="Elooi - Cloud of Voice">
-<title>...MultiDraw.co - Social Drawing - a Taipei Hackerspace Prenentation</title>
-<link href="css/ui-lightness/jquery-ui-1.10.4.custom.css" rel="stylesheet">
-<link href="css/draw.css" rel="stylesheet">
-<script src="js/jquery-1.10.2.js"></script>
-<script src="js/jquery-ui-1.10.4.js"></script> 
-<script src="js/jquery.ui.touch-punch.min.js" type="text/javascript" charset="utf-8"></script>
+<meta name="title" content="Video Now!">
+<title>Desktop - Game Controller</title>
 
-<script src="js/jquery.animatedborder.js" type="text/javascript"></script>
-<link rel="stylesheet" media="screen" href="css/animatedborder.css">
+<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 
-<script src="js/draw.js" type="text/javascript" charset="utf-8"></script>
-
-<link href='http://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
+<script src="desktop-client.js"></script>
 
 </head>
 
+<BODY>
 
+<style>
+* { font-family:tahoma; font-size:12px; padding:0px; margin:0px; }
+p { line-height:18px; }
+#content { padding:5px; background:#ddd; border-radius:5px; overflow-y: scroll;
+		   border:1px solid #CCC; margin-top:10px; height: 160px; width:550px;  }
+#input { border-radius:2px; border:1px solid #ccc;
+		 margin-top:10px; padding:5px; width:230px;  }
+#status { width:88px; display:block; float:left; margin-top:15px; }
+</style>
 
+<div style="display:inline-block; vertical-align:top">
+	<div id="content"></div>
+	<div>
+		<span id="status">Connecting...</span>
+		<input type="text" id="input" disabled="disabled" />
+	</div>
 
-<html>
-<body>
-	<canvas id="myCanvas" width="600" height="300" style="border:1px solid #000000;"></canvas>
+</div>
+
+<canvas id="myCanvas" width="600" height="300" style="border:1px solid #000000;"></canvas>
 
 </body>
 </html>

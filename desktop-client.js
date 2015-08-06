@@ -21,7 +21,7 @@ var arAlpha = 0;
 var arBeta = 0;
 var arGamma = 0;
 
-var delay = 25;
+var delay = 100;
 var vMultiplier = 0.01;
 
 var alpha = 0;
@@ -29,6 +29,13 @@ var beta = 0;
 var gamma = 0;
 
 $(document).ready(function() {
+
+
+	var c = document.getElementById("myCanvas");
+	var ctx = c.getContext("2d");
+	ctx.moveTo(DrawX, DrawY);
+	ctx.stroke();
+
 
 	// for better performance - to avoid searching in DOM
 	var content = $('#content');
@@ -138,84 +145,39 @@ $(document).ready(function() {
 		}
 	}, 3000);
 
+	function escapeRegExp(string) {
+		return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+	}
+
+	function replaceAll(string, find, replace) {
+		return string.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+	}
+
 	/**
 	 * Add message to the chat window
 	 */
 	function addMessage(author, message, color, dt) {
-		content.prepend('<p><span style="color:' + color + '">' + author + '</span> @ ' +
-			+(dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours()) + ':' + (dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes()) + ': ' + message + '</p>');
-	}
 
+		message = replaceAll(message, "'", "\"");
+		try {
+			var json = JSON.parse(message);
 
-	var c = document.getElementById("myCanvas");
-	var ctx = c.getContext("2d");
-	ctx.moveTo(DrawX, DrawY);
-	ctx.stroke();
+			//ctx.moveTo(json.x,json.y);
+			ctx.lineTo(json.x, json.y + 1);
+			ctx.stroke();
 
-	window.ondevicemotion = function(event) {
-		ax = Math.round(Math.abs(event.acceleration.x * 1)); //accelerationIncludingGravity
-		ay = Math.round(Math.abs(event.acceleration.y * 1));
-		az = Math.round(Math.abs(event.acceleration.z * 1));
-		ai = Math.round(event.interval * 100) / 100;
-		rR = event.rotationRate;
-		if (rR != null) {
-			arAlpha = Math.round(rR.alpha);
-			arBeta = Math.round(rR.beta);
-			arGamma = Math.round(rR.gamma);
+			//			ctx.moveTo(10,10);
+			//			ctx.lineTo(20,20);
+			//			ctx.stroke();
+			content.prepend('<p><span style="color:' + color + '">' + author + '</span> @ ' +
+				+(dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours()) + ':' + (dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes()) + ': ' + message + ' --- ' + parseInt(json.y, 10) + '</p>');
+
+		} catch (e) {
+			console.log('This doesn\'t look like a valid JSON: ', message);
+			return;
 		}
 	}
 
-	window.ondeviceorientation = function(event) {
-		alpha = Math.round(event.alpha);
-		beta = Math.round(event.beta);
-		gamma = Math.round(event.gamma);
-	}
 
-	setInterval(function() {
-		$("#xlabel").text("X: " + ax);
-		$("#ylabel").text("Y: " + ay);
-		$("#zlabel").text("Z: " + az);
-		$("#ilabel").text("I: " + ai);
-		$("#arAlphaLabel").text("arA: " + arAlpha);
-		$("#arBetaLabel").text("arB: " + arBeta);
-		$("#arGammaLabel").text("arG: " + arGamma);
 
-		$("#alphalabel").text("Alpha: " + alpha);
-		$("#betalabel").text("Beta: " + beta);
-		$("#gammalabel").text("Gamma: " + gamma);
-
-		if (beta > 0) {
-			DrawX += (beta / 10);
-			if (DrawX > 600) {
-				DrawX = 0;
-				ctx.moveTo(DrawX, DrawY);
-			}
-		} else {
-			DrawX -= ((beta * (-1)) / 10);
-			if (DrawX < 0) {
-				DrawX = 600;
-				ctx.moveTo(DrawX, DrawY);
-			}
-		}
-		if (gamma > 0) {
-			DrawY -= (gamma / 10);
-			if (DrawY < 0) {
-				DrawY = 300;
-				ctx.moveTo(DrawX, DrawY);
-			}
-		} else {
-			DrawY += ((gamma * (-1)) / 10);
-			if (DrawY > 300) {
-				DrawY = 0;
-				ctx.moveTo(DrawX, DrawY);
-			}
-		}
-
-		ctx.lineTo(DrawX, DrawY);
-		ctx.stroke();
-
-		if (myName === false) {} else {
-			connection.send("{'x':" + DrawX + ", 'y':" + DrawY + "}");
-		}
-	}, delay);
 });

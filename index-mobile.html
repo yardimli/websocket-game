@@ -1,153 +1,56 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="Content-Language" content="en-us">
-<meta name="title" content="Video Now!">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="Content-Language" content="en-us">
+	<meta name="viewport" content="width=device-width,target-densitydpi=device-dpi,initial-scale=1.0, user-scalable=yes, minimum-scale=0.50, maximum-scale=1.5">
 
-<meta name="viewport" content="width=device-width,target-densitydpi=device-dpi,initial-scale=1.0, user-scalable=yes, minimum-scale=0.50, maximum-scale=1.5">
+	<title>Phone - Game Controller</title>
 
-<title>Phone - Game Controller</title>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 
-<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="mobile-client.js"></script>
 </head>
 
 <BODY>
+	<div <div id="yes">
+		<div class="box" id="accel">
+			<span class="head">Accelerometer</span>
+			<br>
+			<span id="xlabel"></span>
+			<br>
+			<span id="ylabel"></span>
+			<br>
+			<span id="zlabel"></span>
+			<br>
+			<span id="ilabel"></span>
+			<br>
+			<span id="arAlphaLabel"></span>
+			<br>
+			<span id="arBetaLabel"></span>
+			<br>
+			<span id="arGammaLabel"></span>
+			<br>
+		</div>
 
-<script>
-	// Position Variables
-	var x = 0;
-	var y = 0;
-	var z = 0;
+		<div class="box" id="gyro">
+			<span class="head">Gyroscope</span>
+			<br>
+			<span id="alphalabel"></span>
+			<br>
+			<span id="betalabel"></span>
+			<br>
+			<span id="gammalabel"></span>
+			<br>
+		</div>
+	</div>
 
-	var DrawX = 100;
-	var DrawY = 100;
+	<canvas id="myCanvas" width="600" height="300" style="border:1px solid #000000;"></canvas>
 
-	// Speed - Velocity
-	var vx = 0;
-	var vy = 0;
-	var vz = 0;
-
-	// Acceleration
-	var ax = 0;
-	var ay = 0;
-	var az = 0;
-	var ai = 0;
-
-	var arAlpha = 0;
-	var arBeta = 0;
-	var arGamma = 0;
-
-	var delay = 100;
-	var vMultiplier = 0.01;
-
-	var alpha = 0;
-	var beta = 0;
-	var gamma = 0;
-
-$(document).ready(function() {
-
-
-	var c=document.getElementById("myCanvas");
-	var ctx=c.getContext("2d");
-	ctx.moveTo(DrawX,DrawY);
-	ctx.stroke();
-
-	if (window.DeviceMotionEvent==undefined) {
-//		$("#no").show();
-//		$("#yes").hide();
-	} else
-	{
-		$("#no").hide();
-		$("#yes").show();
-
-	}
-
-	//$(window).bind("devicemotion", function(event) {
-	window.ondevicemotion = function(event) {
-	//	$("#test-div").text("hello "+event.accelerationIncludingGravity.x);
-
-		ax = Math.round(Math.abs(event.acceleration.x * 1)); //accelerationIncludingGravity
-		ay = Math.round(Math.abs(event.acceleration.y * 1));
-		az = Math.round(Math.abs(event.acceleration.z * 1));
-		ai = Math.round(event.interval * 100) / 100;
-		rR = event.rotationRate;
-		if (rR != null) {
-			arAlpha = Math.round(rR.alpha);
-			arBeta = Math.round(rR.beta);
-			arGamma = Math.round(rR.gamma);
-
-		}
-
-/*
-		ax = Math.abs(event.acceleration.x * 1000);
-		ay = Math.abs(event.acceleration.y * 1000);
-		az = Math.abs(event.acceleration.z * 1000);
-*/
-	}//);
-
-
-	window.ondeviceorientation = function(event) {
-		alpha = Math.round(event.alpha);
-		beta = Math.round(event.beta);
-		gamma = Math.round(event.gamma);
-	}//);
-
-	setInterval(function() {
-		$("#xlabel").text( "X: " + ax);
-		$("#ylabel").text("Y: " + ay);
-		$("#zlabel").text("Z: " + az);
-		$("#ilabel").text("I: " + ai);
-		$("#arAlphaLabel").text("arA: " + arAlpha);
-		$("#arBetaLabel").text("arB: " + arBeta);
-		$("#arGammaLabel").text("arG: " + arGamma);
-
-		$("#alphalabel").text("Alpha: " + alpha);
-		$("#betalabel").text("Beta: " + beta);
-		$("#gammalabel").text("Gamma: " + gamma);
-
-		//arAlpha = 1;
-
-		//ctx.moveTo(DrawX,DrawY);
-		//console.log(DrawX+" "+DrawY)
-
-		if (beta > 0) { DrawX += (beta/10); if (DrawX>600) { DrawX = 0; ctx.moveTo(DrawX,DrawY); }  } else { DrawX -= ((beta*(-1))/10); if (DrawX<0) { DrawX = 600; ctx.moveTo(DrawX,DrawY); } }
-		if (gamma > 0) { DrawY -= (gamma/10); if (DrawY<0) { DrawY = 300; ctx.moveTo(DrawX,DrawY); } } else { DrawY += ((gamma*(-1))/10); if (DrawY>300) { DrawY = 0; ctx.moveTo(DrawX,DrawY); } }
-
-
-		ctx.lineTo(DrawX,DrawY);
-		ctx.stroke();
-
-	}, delay);
-
-});
-</script>
-
-<div <div id="yes">
-				<div class="box" id="accel">
-					<span class="head">Accelerometer</span><br>
-					<span id="xlabel"></span><br>
-					<span id="ylabel"></span><br>
-					<span id="zlabel"></span><br>
-					<span id="ilabel"></span><br>
-					<span id="arAlphaLabel"></span><br>
-					<span id="arBetaLabel"></span><br>
-					<span id="arGammaLabel"></span><br>
-				</div>
-
-				<div class="box" id="gyro">
-					<span class="head">Gyroscope</span><br>
-					<span id="alphalabel"></span><br>
-					<span id="betalabel"></span><br>
-					<span id="gammalabel"></span><br>
-				</div>
-</div>
-
-<canvas id="myCanvas" width="600" height="300" style="border:1px solid #000000;"></canvas>
-
-<div id="no">
-	Your browser does not support Device Orientation and Motion API. Try this sample with iPhone, iPod or iPad with iOS 4.2+.
-</div>
+	<div id="no">
+		Your browser does not support Device Orientation and Motion API. Try this sample with iPhone, iPod or iPad with iOS 4.2+.
+	</div>
 
 </body>
+
 </html>
