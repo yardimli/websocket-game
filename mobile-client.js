@@ -21,21 +21,13 @@ var arAlpha = 0;
 var arBeta = 0;
 var arGamma = 0;
 
-var delay = 100;
-var vMultiplier = 0.01;
+var delay = 50;
 
 var alpha = 0;
 var beta = 0;
 var gamma = 0;
 
 $(document).ready(function() {
-
-
-	var c = document.getElementById("myCanvas");
-	var ctx = c.getContext("2d");
-	ctx.moveTo(DrawX, DrawY);
-	ctx.stroke();
-
 	if (window.DeviceMotionEvent == undefined) {
 		//		$("#no").show();
 		//		$("#yes").hide();
@@ -60,20 +52,13 @@ $(document).ready(function() {
 				arGamma = Math.round(rR.gamma);
 
 			}
-
-			/*
-					ax = Math.abs(event.acceleration.x * 1000);
-					ay = Math.abs(event.acceleration.y * 1000);
-					az = Math.abs(event.acceleration.z * 1000);
-			*/
-		} //);
-
+		}
 
 	window.ondeviceorientation = function(event) {
 			alpha = Math.round(event.alpha);
 			beta = Math.round(event.beta);
 			gamma = Math.round(event.gamma);
-		} //);
+		}
 
 	setInterval(function() {
 		$("#xlabel").text("X: " + ax);
@@ -88,11 +73,6 @@ $(document).ready(function() {
 		$("#betalabel").text("Beta: " + beta);
 		$("#gammalabel").text("Gamma: " + gamma);
 
-		//arAlpha = 1;
-
-		//ctx.moveTo(DrawX,DrawY);
-		//console.log(DrawX+" "+DrawY)
-
 		if (beta > 0) {
 			DrawX += (beta / 10);
 			if (DrawX > 600) {
@@ -106,6 +86,7 @@ $(document).ready(function() {
 				ctx.moveTo(DrawX, DrawY);
 			}
 		}
+
 		if (gamma > 0) {
 			DrawY -= (gamma / 10);
 			if (DrawY < 0) {
@@ -119,11 +100,5 @@ $(document).ready(function() {
 				ctx.moveTo(DrawX, DrawY);
 			}
 		}
-
-
-		ctx.lineTo(DrawX, DrawY);
-		ctx.stroke();
-
 	}, delay);
-
 });
