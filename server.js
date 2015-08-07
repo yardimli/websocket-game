@@ -94,20 +94,41 @@ wsServer.on('request', function(request) {
 				console.log((new Date()) + ' Received Message from ' + userName + ': ' + message.utf8Data);
 
 				// we want to keep history of all sent messages
-				var obj = {
-					time: (new Date()).getTime(),
-					text: htmlEntities(message.utf8Data),
-					author: userName,
-					color: userColor
-				};
+				var xmsg = htmlEntities(message.utf8Data);
+				if (xmsg.indexOf("xy_")==1)
+				{
+					var xmsgarray = xmsg.split("_");
+					var obj = {
+						time: (new Date()).getTime(),
+						xpos: xmsgarray[1],
+						xpos: xmsgarray[2],
+						author: userName,
+						color: userColor
+					};
+
+					var json = JSON.stringify({
+						type: 'position',
+						data: obj
+					});
+
+				} else {
+					var obj = {
+						time: (new Date()).getTime(),
+						text: htmlEntities(message.utf8Data),
+						author: userName,
+						color: userColor
+					};
+
+					var json = JSON.stringify({
+						type: 'message',
+						data: obj
+					});
+				}
+
 				history.push(obj);
 				history = history.slice(-100);
 
 				// broadcast message to all connected clients
-				var json = JSON.stringify({
-					type: 'message',
-					data: obj
-				});
 				for (var i = 0; i < clients.length; i++) {
 					clients[i].sendUTF(json);
 				}

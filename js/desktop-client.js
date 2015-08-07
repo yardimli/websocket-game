@@ -103,8 +103,10 @@ $(document).ready(function() {
 			}
 		} else if (json.type === 'message') { // it's a single message
 			input.removeAttr('disabled'); // let the user write another message
-			addMessage(json.data.author, json.data.text,
-				json.data.color, new Date(json.data.time));
+			addMessage(json.data.author, json.data.text, json.data.color, new Date(json.data.time));
+		} else if (json.type === 'message') { // it's a single message
+				input.removeAttr('disabled'); // let the user write another message
+				addCoordinate(json.data.author, json.data.xpos, json.data.ypos, json.data.color);
 		} else {
 			console.log('Hmm..., I\'ve never seen JSON like this: ', json);
 		}
@@ -160,23 +162,27 @@ $(document).ready(function() {
 
 		message = replaceAll(message, "'", "\"");
 		try {
-			var json = JSON.parse(message);
-
-			//ctx.moveTo(json.x,json.y);
-			ctx.lineTo(json.x, json.y + 1);
-			ctx.stroke();
-
-			//			ctx.moveTo(10,10);
-			//			ctx.lineTo(20,20);
-			//			ctx.stroke();
 			content.prepend('<p><span style="color:' + color + '">' + author + '</span> @ ' +
-				+(dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours()) + ':' + (dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes()) + ': ' + message + ' --- ' + parseInt(json.y, 10) + '</p>');
+				+(dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours()) + ':' + (dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes()) + ': ' + message + '</p>');
 
 		} catch (e) {
 			console.log('This doesn\'t look like a valid JSON: ', message);
 			return;
 		}
 	}
+
+	function addCoordinate(author, xpos, ypos, color)
+	{
+		ctx.moveTo(xpos,ypos);
+		ctx.lineTo(xpos,ypos + 1);
+		ctx.stroke();
+
+		//			ctx.moveTo(10,10);
+		//			ctx.lineTo(20,20);
+		//			ctx.stroke();
+
+	}
+
 
 
 
