@@ -104,7 +104,7 @@ $(document).ready(function() {
 		} else if (json.type === 'message') { // it's a single message
 			input.removeAttr('disabled'); // let the user write another message
 			addMessage(json.data.author, json.data.text, json.data.color, new Date(json.data.time));
-		} else if (json.type === 'message') { // it's a single message
+		} else if (json.type === 'position') { // it's a position
 				input.removeAttr('disabled'); // let the user write another message
 				addCoordinate(json.data.author, json.data.xpos, json.data.ypos, json.data.color);
 		} else {
@@ -147,28 +147,13 @@ $(document).ready(function() {
 		}
 	}, 3000);
 
-	function escapeRegExp(string) {
-		return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
-	}
-
-	function replaceAll(string, find, replace) {
-		return string.replace(new RegExp(escapeRegExp(find), 'g'), replace);
-	}
-
 	/**
 	 * Add message to the chat window
 	 */
 	function addMessage(author, message, color, dt) {
 
-		message = replaceAll(message, "'", "\"");
-		try {
-			content.prepend('<p><span style="color:' + color + '">' + author + '</span> @ ' +
-				+(dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours()) + ':' + (dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes()) + ': ' + message + '</p>');
-
-		} catch (e) {
-			console.log('This doesn\'t look like a valid JSON: ', message);
-			return;
-		}
+		content.prepend('<p><span style="color:' + color + '">' + author + '</span> @ ' +
+			+(dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours()) + ':' + (dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes()) + ': ' + message + '</p>');
 	}
 
 	function addCoordinate(author, xpos, ypos, color)
@@ -176,11 +161,6 @@ $(document).ready(function() {
 		ctx.moveTo(xpos,ypos);
 		ctx.lineTo(xpos,ypos + 1);
 		ctx.stroke();
-
-		//			ctx.moveTo(10,10);
-		//			ctx.lineTo(20,20);
-		//			ctx.stroke();
-
 	}
 
 
