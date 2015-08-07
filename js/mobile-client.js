@@ -202,27 +202,23 @@ $(document).ready(function() {
 		if (beta > 0) {
 			DrawX += (beta / 10);
 			if (DrawX > 600) {
-				DrawX = 0;
-				ctx.moveTo(DrawX, DrawY);
+				DrawX = 600;
 			}
 		} else {
 			DrawX -= ((beta * (-1)) / 10);
 			if (DrawX < 0) {
-				DrawX = 600;
-				ctx.moveTo(DrawX, DrawY);
+				DrawX = 0;
 			}
 		}
 		if (gamma > 0) {
 			DrawY -= (gamma / 10);
 			if (DrawY < 0) {
-				DrawY = 300;
-				ctx.moveTo(DrawX, DrawY);
+				DrawY = 0;
 			}
 		} else {
 			DrawY += ((gamma * (-1)) / 10);
 			if (DrawY > 300) {
-				DrawY = 0;
-				ctx.moveTo(DrawX, DrawY);
+				DrawY = 300;
 			}
 		}
 
