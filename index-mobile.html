@@ -38,30 +38,94 @@
 	#input {
 		border-radius: 2px;
 		border: 1px solid #ccc;
-		margin-top: 10px;
+		margin-top: 5px;
 		padding: 5px;
 		width: 230px;
 	}
 
 	#status {
 		width: 88px;
-		display: block;
-		float: left;
-		margin-top: 15px;
+		display: inline-block;
+		margin-top: 5px;
 	}
+
+
+	#sensordata {
+		padding: 5px;
+		background: #ddd;
+		border-radius: 5px;
+		overflow-y: scroll;
+		border: 1px solid #CCC;
+		margin-top: 10px;
+		height: 80px;
+		width: 350px;
+	}
+
+	.myButton {
+		-moz-box-shadow: 0px 1px 0px 0px #f0f7fa;
+		-webkit-box-shadow: 0px 1px 0px 0px #f0f7fa;
+		box-shadow: 0px 1px 0px 0px #f0f7fa;
+		background-color:#33bdef;
+		-moz-border-radius:6px;
+		-webkit-border-radius:6px;
+		border-radius:6px;
+		border:1px solid #057fd0;
+		display:inline-block;
+		cursor:pointer;
+		color:#ffffff;
+		font-family:Arial;
+		font-size:15px;
+		font-weight:bold;
+		padding:2px 14px;
+		text-decoration:none;
+		text-shadow:0px -1px 0px #5b6178;
+		width:60px;
+		text-align:center;
+		margin-bottom:4px;
+	}
+	.myButton:hover {
+	}
+	.myButton:active {
+		position:relative;
+		top:1px;
+	}
+
+
 
 </style>
 
 <BODY>
 
-	<div style="display:inline-block; vertical-align:top">
-		<div id="content"></div>
-		<div>
-			<span id="status">Connecting...</span>
-			<input type="text" id="input" disabled="disabled" />
+	<div style="vertical-align:top">
+
+		<div style="">
+			<div id="content"></div>
+			<div style="width:362px;">
+
+				<div style="padding:4px; display:block;">
+					<span id="status">Connecting...</span>
+					<input type="text" id="input" disabled="disabled" style="display:none"/>
+				</div>
+
+				<div style="padding:4px; display:block; text-align:center;" id="ChooseName">
+					<a href="#" class="myButton" id="name_Leonore_red" style="background-color:red">Leonore</a>
+					<a href="#" class="myButton" id="name_Leonore_blue" style="background-color:blue">Ekim</a>
+					<a href="#" class="myButton" id="name_Leonore_green" style="background-color:green">Ege</a>
+					<a href="#" class="myButton" id="name_Smith_brown" style="background-color:brown">Smith</a>
+					<a href="#" class="myButton" id="name_Linda_magenta" style="background-color:magneta">Linda</a>
+					<a href="#" class="myButton" id="name_Johnson_gray" style="background-color:gray">Johnson</a>
+					<a href="#" class="myButton" id="name_Dorothy_pink" style="background-color:pink">Dorothy</a>
+					<a href="#" class="myButton" id="name_Nancy_indigo" style="background-color:indigo">Nancy</a>
+					<a href="#" class="myButton" id="name_Michael_darkorchid" style="background-color:DarkOrchid">Michael</a>
+					<a href="#" class="myButton" id="name_Susan_burlywood" style="background-color:BurlyWood">Susan</a>
+					<a href="#" class="myButton" id="name_George_chocolate" style="background-color:Chocolate">George</a>
+					<a href="#" class="myButton" id="name_Donna_crimson" style="background-color:Crimson">Donna</a>
+				</div>
+
+			</div>
 		</div>
 
-		<div id="yes">
+		<div id="sensordata">
 			<div class="box" id="accel">
 				<span class="head">Accelerometer</span>:
 				<span id="xlabel"></span>,
@@ -79,12 +143,14 @@
 				<span id="betalabel"></span>,
 				<span id="gammalabel"></span>
 			</div>
+
+			<div id="no">
+				<br>Your browser does not support Device Orientation and Motion API. Try this sample with iPhone, iPod or iPad with iOS 4.2+.
+			</div>
+
 		</div>
 	</div>
 
-	<div id="no">
-		Your browser does not support Device Orientation and Motion API. Try this sample with iPhone, iPod or iPad with iOS 4.2+.
-	</div>
 
 </body>
 

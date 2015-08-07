@@ -27,12 +27,6 @@ function htmlEntities(str) {
 		.replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-// Array with some colors
-var colors = ['red', 'green', 'blue', 'magenta', 'purple', 'plum', 'orange'];
-// ... in random order
-colors.sort(function(a, b) {
-	return Math.random() > 0.5;
-});
 
 /**
  * HTTP server
@@ -82,9 +76,12 @@ wsServer.on('request', function(request) {
 		if (message.type === 'utf8') { // accept only text
 			if (userName === false) { // first message sent by user is their name
 				// remember user name
+				console.log(message);
 				userName = htmlEntities(message.utf8Data);
 				// get random color and send it back to the user
+
 				userColor = colors.shift();
+
 				connection.sendUTF(JSON.stringify({
 					type: 'color',
 					data: userColor

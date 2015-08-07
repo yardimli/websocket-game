@@ -103,6 +103,16 @@ $(document).ready(function() {
 		}
 	};
 
+
+	$(".myButton").on('click', function() {
+		console.log($(this).attr("id"));
+		var tempname = $(this).attr("id");
+		var temparray = tempname.split("_");
+		var username = temparray[1];
+		var usercolor = temparray[2];
+		connection.send(tempname);
+	});
+
 	/**
 	 * Send mesage when user presses Enter key
 	 */
@@ -146,11 +156,6 @@ $(document).ready(function() {
 			+(dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours()) + ':' + (dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes()) + ': ' + message + '</p>');
 	}
 
-
-	var c = document.getElementById("myCanvas");
-	var ctx = c.getContext("2d");
-	ctx.moveTo(DrawX, DrawY);
-	ctx.stroke();
 
 	window.ondevicemotion = function(event) {
 		ax = Math.round(Math.abs(event.acceleration.x * 1)); //accelerationIncludingGravity
@@ -210,9 +215,6 @@ $(document).ready(function() {
 				ctx.moveTo(DrawX, DrawY);
 			}
 		}
-
-		ctx.lineTo(DrawX, DrawY);
-		ctx.stroke();
 
 		if (myName === false) {} else {
 			connection.send("{'x':" + DrawX + ", 'y':" + DrawY + "}");
