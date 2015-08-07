@@ -85,6 +85,7 @@ $(document).ready(function() {
 		// check the server source code above
 		if (json.type === 'color') { // first response from the server with user's color
 			myColor = json.data;
+			myName = json.username;
 			status.text(myName + ': ').css('color', myColor);
 			input.removeAttr('disabled').focus();
 			input.show();
