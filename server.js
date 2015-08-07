@@ -124,10 +124,11 @@ wsServer.on('request', function(request) {
 						type: 'message',
 						data: obj
 					});
+					
+					history.push(obj);
+					history = history.slice(-100);
 				}
 
-				history.push(obj);
-				history = history.slice(-100);
 
 				// broadcast message to all connected clients
 				for (var i = 0; i < clients.length; i++) {
