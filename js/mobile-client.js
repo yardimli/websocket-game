@@ -3,6 +3,9 @@ var x = 0;
 var y = 0;
 var z = 0;
 
+var lastx = 0;
+var lasty = 0;
+
 var DrawX = 100;
 var DrawY = 100;
 
@@ -101,6 +104,9 @@ $(document).ready(function() {
 			input.removeAttr('disabled'); // let the user write another message
 			addMessage(json.data.author, json.data.text,
 				json.data.color, new Date(json.data.time));
+		} else if (json.type === 'position') { // it's a coordinate message
+			input.removeAttr('disabled');
+
 		} else {
 			console.log('Hmm..., I\'ve never seen JSON like this: ', json);
 		}
@@ -221,7 +227,13 @@ $(document).ready(function() {
 		}
 
 		if (myName === false) {} else {
-			connection.send("xy_" + DrawX + "_" + DrawY);
+			if ( (DrawX!=lastx) || (DrawY!=lasty) )
+			{
+				connection.send("xy_" + DrawX + "_" + DrawY);
+			}
+
+			lastx=DrawX;
+			lasty=DrawY;
 		}
 	}, delay);
 });
