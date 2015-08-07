@@ -28,14 +28,24 @@ var alpha = 0;
 var beta = 0;
 var gamma = 0;
 
+var UsersLastX = [];
+var UsersLastY = [];
+
+var ShowCircle = 10;
+
 $(document).ready(function() {
 
 
 	var c = document.getElementById("myCanvas");
 	var ctx = c.getContext("2d");
-	ctx.moveTo(DrawX, DrawY);
-	ctx.stroke();
 
+	var c2 = document.getElementById("myCanvasBlink");
+	var ctx2 = c2.getContext("2d");
+	/*
+	ctx.moveTo(0, 0);
+	ctx.lineTo(150, 150);
+	ctx.stroke();
+	*/
 
 	// for better performance - to avoid searching in DOM
 	var content = $('#content');
@@ -158,9 +168,27 @@ $(document).ready(function() {
 
 	function addCoordinate(author, xpos, ypos, color)
 	{
-		ctx.moveTo(xpos,ypos);
-		ctx.lineTo(xpos,ypos + 1);
+		if(typeof UsersLastX[author] === 'undefined') {
+		    UsersLastX[author] = parseInt(xpos,10);
+			 UsersLastY[author] = parseInt(ypos,10);
+		}
+
+//		console.log(xpos+" "+ypos);
+		ctx.beginPath();
+		ctx.strokeStyle = color;
+		ctx.moveTo(UsersLastX[author],UsersLastY[author]);
+		ctx.lineTo(parseInt(xpos,10),parseInt(ypos,10));
 		ctx.stroke();
+
+		ctx2.clearRect(0,0,600,300);
+
+		ctx2.beginPath();
+		ctx2.strokeStyle = color;
+		ctx2.arc(parseInt(xpos,10),parseInt(ypos,10),5,0,2*Math.PI);
+		ctx2.stroke();
+
+		UsersLastX[author] = parseInt(xpos,10);
+		UsersLastY[author] = parseInt(ypos,10);
 	}
 
 

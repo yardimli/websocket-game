@@ -32,7 +32,10 @@ p { line-height:18px; }
 
 </div>
 
-<canvas id="myCanvas" width="600" height="300" style="border:1px solid #000000;"></canvas>
+<div style="position:relative;">
+<canvas id="myCanvas" width="600" height="300" style="border:1px solid #000000; position:absolute; left:0px; top:0px; z-index:10;"></canvas>
+<canvas id="myCanvasBlink" width="600" height="300" style="border:1px solid #000000; position:absolute; left:0px; top:0px; z-index:20;"></canvas>
+</div>
 
 </body>
 </html>
