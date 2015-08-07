@@ -77,15 +77,16 @@ wsServer.on('request', function(request) {
 			if (userName === false) { // first message sent by user is their name
 				// remember user name
 				console.log(message);
-				userName = htmlEntities(message.utf8Data);
-				// get random color and send it back to the user
-
-				userColor = colors.shift();
+				var tempstring = htmlEntities(message.utf8Data);
+				var temparray = tempstring.split("_");
+				userName = temparray[1];
+				userColor = temparray[2];
 
 				connection.sendUTF(JSON.stringify({
 					type: 'color',
 					data: userColor
 				}));
+				
 				console.log((new Date()) + ' User is known as: ' + userName + ' with ' + userColor + ' color.');
 
 			} else { // log and broadcast the message

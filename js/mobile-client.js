@@ -87,6 +87,8 @@ $(document).ready(function() {
 			myColor = json.data;
 			status.text(myName + ': ').css('color', myColor);
 			input.removeAttr('disabled').focus();
+			input.show();
+
 			// from now user can start sending messages
 		} else if (json.type === 'history') { // entire message history
 			// insert every single message to the chat window
@@ -105,11 +107,11 @@ $(document).ready(function() {
 
 
 	$(".myButton").on('click', function() {
-		console.log($(this).attr("id"));
 		var tempname = $(this).attr("id");
+/*		console.log($(this).attr("id"));
 		var temparray = tempname.split("_");
 		var username = temparray[1];
-		var usercolor = temparray[2];
+		var usercolor = temparray[2];*/
 		connection.send(tempname);
 	});
 
