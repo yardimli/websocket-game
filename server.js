@@ -91,17 +91,17 @@ wsServer.on('request', function(request) {
 				console.log((new Date()) + ' User is known as: ' + userName + ' with ' + userColor + ' color.');
 
 			} else { // log and broadcast the message
-				console.log((new Date()) + ' Received Message from ' + userName + ': ' + message.utf8Data);
 
 				// we want to keep history of all sent messages
 				var xmsg = htmlEntities(message.utf8Data);
-				if (xmsg.indexOf("xy_")==1)
+				if (xmsg.indexOf("xy_")==0)
 				{
+					console.log("coordinate message from " + userName + " " +xmsg);
 					var xmsgarray = xmsg.split("_");
 					var obj = {
 						time: (new Date()).getTime(),
 						xpos: xmsgarray[1],
-						xpos: xmsgarray[2],
+						ypos: xmsgarray[2],
 						author: userName,
 						color: userColor
 					};
@@ -112,6 +112,7 @@ wsServer.on('request', function(request) {
 					});
 
 				} else {
+					console.log((new Date()) + ' Received Message from ' + userName + ': ' + message.utf8Data);
 					var obj = {
 						time: (new Date()).getTime(),
 						text: htmlEntities(message.utf8Data),
@@ -142,8 +143,6 @@ wsServer.on('request', function(request) {
 			console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");
 			// remove user from the list of connected clients
 			clients.splice(index, 1);
-			// push back user's color to be reused by another user
-			colors.push(userColor);
 		}
 	});
 
