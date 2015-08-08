@@ -180,7 +180,7 @@ $(document).ready(function() {
 		ctx.lineTo(parseInt(xpos,10),parseInt(ypos,10));
 		ctx.stroke();
 
-		ctx2.clearRect(parseInt(xpos,10)-20,parseInt(ypos,10)-20,parseInt(xpos,10)+20,parseInt(ypos,10)+20);
+		ctx2.clearRect(UsersLastX[author]-10,UsersLastY[author]-10,UsersLastX[author]+10,UsersLastY[author]+10);
 
 		ctx2.beginPath();
 		ctx2.strokeStyle = color;

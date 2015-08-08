@@ -24,7 +24,7 @@ var arAlpha = 0;
 var arBeta = 0;
 var arGamma = 0;
 
-var delay = 100;
+var delay = 50;
 var vMultiplier = 0.01;
 
 var alpha = 0;
