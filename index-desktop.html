@@ -1,41 +1,136 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="Content-Language" content="en-us">
-<meta name="title" content="Video Now!">
-<title>Desktop - Game Controller</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="Content-Language" content="en-us">
+	<meta name="title" content="Video Now!">
+	<title>Desktop - Game Controller</title>
 
-<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 
-<script src="js/desktop-client.js"></script>
+	<script src="js/desktop-client.js"></script>
 
 </head>
 
 <BODY>
 
-<style>
-* { font-family:tahoma; font-size:12px; padding:0px; margin:0px; }
-p { line-height:18px; }
-#content { padding:5px; background:#ddd; border-radius:5px; overflow-y: scroll;
-		   border:1px solid #CCC; margin-top:10px; height: 160px; width:550px;  }
-#input { border-radius:2px; border:1px solid #ccc;
-		 margin-top:10px; padding:5px; width:230px;  }
-#status { width:88px; display:block; float:left; margin-top:15px; }
-</style>
+	<style>
+	/*
+		* {
+			font-family: tahoma;
+			font-size: 12px;
+			padding: 0px;
+			margin: 0px;
+		}
+		*/
 
-<div style="position:relative; height:320px;">
-	<canvas id="myCanvas" width="600" height="300" style="border:1px solid #000000; position:absolute; left:0px; top:0px; z-index:10;"></canvas>
-	<canvas id="myCanvasBlink" width="600" height="300" style="border:1px solid #000000; position:absolute; left:0px; top:0px; z-index:20;"></canvas>
-</div>
+		p {
+			font-family: tahoma;
+			font-size: 12px;
 
-<div style="vertical-align:top">
-	<div id="content"></div>
-	<div>
-		<span id="status">Connecting...</span>
-		<input type="text" id="input" disabled="disabled" />
+			line-height: 8px;
+		}
+
+		#content {
+			font-family: tahoma;
+			font-size: 12px;
+			padding: 5px;
+			background: #ddd;
+			border-radius: 5px;
+			overflow-y: scroll;
+			border: 1px solid #CCC;
+			margin-top: 10px;
+			height: 160px;
+			width: 590px;
+		}
+
+		#input {
+			font-family: tahoma;
+			font-size: 12px;
+			border-radius: 2px;
+			border: 1px solid #ccc;
+			margin-top: 10px;
+			padding: 5px;
+			width: 430px;
+		}
+
+		#status {
+			font-family: tahoma;
+			font-size: 12px;
+			width: 100px;
+			display: block;
+			float: left;
+			margin-top: 15px;
+		}
+
+		.myButton {
+			font-family: tahoma;
+			font-size: 12px;
+			-moz-box-shadow: 0px 1px 0px 0px #f0f7fa;
+			-webkit-box-shadow: 0px 1px 0px 0px #f0f7fa;
+			box-shadow: 0px 1px 0px 0px #f0f7fa;
+			background-color: #33bdef;
+			-moz-border-radius: 6px;
+			-webkit-border-radius: 6px;
+			border-radius: 6px;
+			border: 1px solid #057fd0;
+			display: inline-block;
+			cursor: pointer;
+			color: #ffffff;
+			font-family: Arial;
+			font-size: 15px;
+			font-weight: bold;
+			padding: 2px 14px;
+			text-decoration: none;
+			text-shadow: 0px -1px 0px #5b6178;
+			width: 60px;
+			text-align: center;
+			margin-bottom: 4px;
+		}
+
+		.myButton:hover {}
+
+		.myButton:active {
+			position: relative;
+			top: 1px;
+		}
+
+	</style>
+
+	<div style="position:relative; height:320px;">
+		<canvas id="myCanvas" width="600" height="300" style="border:1px solid #000000; position:absolute; left:0px; top:0px; z-index:10;"></canvas>
+		<canvas id="myCanvasBlink" width="600" height="300" style="border:1px solid #000000; position:absolute; left:0px; top:0px; z-index:20;"></canvas>
 	</div>
-</div>
+
+	<div style="vertical-align:top">
+		<div id="content"></div>
+		<div>
+			<span id="status">Connecting...</span>
+			<input type="text" id="input" disabled="disabled" />
+		</div>
+	</div>
+
+	<div style="width:600px; 			font-family: tahoma;				font-size: 12px;">
+		<br>
+		Choose the player to track:
+		<div style="padding:4px; display:block; text-align:center;" id="ChooseName">
+			<a href="#" class="myButton" id="name_Leonore_red" style="background-color:red">Leonore</a>
+			<a href="#" class="myButton" id="name_Ekim_blue" style="background-color:blue">Ekim</a>
+			<a href="#" class="myButton" id="name_Ege_green" style="background-color:green">Ege</a>
+			<a href="#" class="myButton" id="name_Smith_brown" style="background-color:brown">Smith</a>
+			<a href="#" class="myButton" id="name_Linda_magenta" style="background-color:magneta">Linda</a>
+			<a href="#" class="myButton" id="name_Johnson_gray" style="background-color:gray">Johnson</a>
+			<a href="#" class="myButton" id="name_Dorothy_pink" style="background-color:pink">Dorothy</a>
+			<a href="#" class="myButton" id="name_Nancy_indigo" style="background-color:indigo">Nancy</a>
+			<a href="#" class="myButton" id="name_Michael_darkorchid" style="background-color:DarkOrchid">Michael</a>
+			<a href="#" class="myButton" id="name_Susan_burlywood" style="background-color:BurlyWood">Susan</a>
+			<a href="#" class="myButton" id="name_George_chocolate" style="background-color:Chocolate">George</a>
+			<a href="#" class="myButton" id="name_Donna_crimson" style="background-color:Crimson">Donna</a>
+		</div>
+
+	</div>
 
 
 </body>
+
 </html>
