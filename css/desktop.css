@@ -1,0 +1,173 @@
+/*
+	* {
+		font-family: tahoma;
+		font-size: 12px;
+		padding: 0px;
+		margin: 0px;
+	}
+	*/
+
+#content p {
+	font-family: tahoma;
+	font-size: 12px;
+	line-height: 8px;
+}
+
+#content {
+	font-family: tahoma;
+	font-size: 12px;
+	padding: 5px;
+	background: #ddd;
+	border-radius: 5px;
+	overflow-y: scroll;
+	border: 1px solid #CCC;
+	margin-top: 10px;
+	height: 160px;
+	width: 590px;
+}
+
+#input {
+	font-family: tahoma;
+	font-size: 12px;
+	border-radius: 2px;
+	border: 1px solid #ccc;
+	margin-top: 10px;
+	padding: 5px;
+	width: 430px;
+}
+
+#status {
+	font-family: tahoma;
+	font-size: 12px;
+	width: 100px;
+	display: block;
+	float: left;
+	margin-top: 15px;
+}
+
+.myButton {
+	font-family: tahoma;
+	font-size: 12px;
+	-moz-box-shadow: 0px 1px 0px 0px #f0f7fa;
+	-webkit-box-shadow: 0px 1px 0px 0px #f0f7fa;
+	box-shadow: 0px 1px 0px 0px #f0f7fa;
+	background-color: #33bdef;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	border: 1px solid #057fd0;
+	display: inline-block;
+	cursor: pointer;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 15px;
+	font-weight: bold;
+	padding: 2px 14px;
+	text-decoration: none;
+	text-shadow: 0px -1px 0px #5b6178;
+	width: 60px;
+	text-align: center;
+	margin-bottom: 4px;
+}
+
+.myButton:hover {}
+.myButton:active {
+	position: relative;
+	top: 1px;
+}
+
+
+.roomcontentbox
+{
+	border-radius: 5px 5px 5px 5px;
+	-moz-border-radius: 5px 5px 5px 5px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+	border: 1px solid #000000;
+
+	-webkit-box-shadow: 0px 0px 30px 5px rgba(0,0,0,0.25);
+	-moz-box-shadow: 0px 0px 30px 5px rgba(0,0,0,0.25);
+	box-shadow: 0px 0px 30px 5px rgba(0,0,0,0.25);
+
+	vertical-align: top;
+
+	width:400px;
+	height:200px;
+	padding:10px;
+	margin:20px;
+
+	display:inline-block;
+}
+
+
+.roomtitle {
+	color: rgb(217, 217, 217);
+	font-size: 50px;
+	text-shadow: rgb(46, 46, 46) 0px 4px 5px;
+}
+
+.dartsroom {
+	background-image: url('../images/42850227.jpg');
+	background-size:100%;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+
+.billardroom {
+	background-image: url('../images/6926365.jpg');
+	background-size:100%;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.golfroom {
+	background-image: url('../images/39225345.jpg');
+	background-size:100%;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+
+.reversiroom {
+	background-image: url('../images/22617958.jpg');
+	background-size:100%;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+
+.cannonroom {
+	background-image: url('../images/27045970.jpg');
+	background-size: 120%;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+
+.tronroom {
+	background-image: url('../images/14753292.jpg');
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.chessroom {
+	background-image: url('../images/22599743.jpg');
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.snakeroom {
+	background-image: url('../images/37121261.jpg');
+	background-size: 60%;
+	background-repeat: no-repeat;
+	background-position: bottom;
+}
+
+.chatroom {
+	background-image: url('../images/37395512.jpg');
+	background-size: 80%;
+	background-repeat: no-repeat;
+	background-position: center;
+}

@@ -1,30 +1,14 @@
-"use strict";
-
-function positionModals(e) {
-	 var $this = $(this).css('display', 'block'),
-		  $window = $(window),
-		  $dialog = $this.find('.modal-dialog'),
-		  offset = ($window.height() - $window.scrollTop() - $dialog.height()) / 2,
-		  marginBottom = parseInt($dialog.css('margin-bottom'), 10);
-
-	 $dialog.css('margin-top', offset < marginBottom ? marginBottom : offset);
-}
-
-$(document).on('show.bs.modal', '.modal', positionModals);
-
-$(window).on('resize', function(e) {
-	 $('.modal:visible').each(positionModals);
-});
-
-
 var UsersLastX = [];
 var UsersLastY = [];
 
 var ShowCircle = 10;
 
 $(document).ready(function() {
+	var c = document.getElementById("myCanvas");
+	var ctx = c.getContext("2d");
 
-	$('#myModal').modal('show');
+	var c2 = document.getElementById("myCanvasBlink");
+	var ctx2 = c2.getContext("2d");
 
 	// for better performance - to avoid searching in DOM
 	var content = $('#content');
@@ -136,6 +120,21 @@ $(document).ready(function() {
 		    UsersLastX[author] = parseInt(xpos,10);
 			 UsersLastY[author] = parseInt(ypos,10);
 		}
+
+//		console.log(xpos+" "+ypos);
+		ctx.beginPath();
+		ctx.strokeStyle = color;
+		ctx.moveTo(UsersLastX[author],UsersLastY[author]);
+//		ctx.moveTo(parseInt(xpos,10),parseInt(ypos,10));
+		ctx.lineTo(parseInt(xpos,10),parseInt(ypos,10)+1);
+		ctx.stroke();
+
+		ctx2.clearRect(UsersLastX[author]-30,UsersLastY[author]-30,UsersLastX[author]+30,UsersLastY[author]+30);
+
+		ctx2.beginPath();
+		ctx2.strokeStyle = color;
+		ctx2.arc(parseInt(xpos,10),parseInt(ypos,10),25,0,2*Math.PI);
+		ctx2.stroke();
 
 		UsersLastX[author] = parseInt(xpos,10);
 		UsersLastY[author] = parseInt(ypos,10);
