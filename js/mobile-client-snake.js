@@ -33,8 +33,6 @@ var gamma = 0;
 
 $(document).ready(function() {
 
-	$('#myModal').modal('show');
-
 	// for better performance - to avoid searching in DOM
 	var content = $('#content');
 	var input = $('#input');
@@ -59,11 +57,12 @@ $(document).ready(function() {
 	}
 
 	// open connection
-	//var connection = new WebSocket('ws://game.elooi.com:1337');
-	var connection = new WebSocket('ws://192.168.1.110:1337');
+	var connection = new WebSocket('ws://game.elooi.com:1337');
 
 	connection.onopen = function() {
-		connection.send("Mobile Connection");
+		// first we want users to enter their names
+		input.removeAttr('disabled');
+		status.text('Choose name:');
 	};
 
 	connection.onerror = function(error) {
@@ -73,7 +72,11 @@ $(document).ready(function() {
 		}));
 	};
 
+	// most important part - incoming messages
 	connection.onmessage = function(message) {
+		// try to parse JSON message. Because we know that the server always returns
+		// JSON this should work without any problem but we should make sure that
+		// the massage is not chunked or otherwise damaged.
 		try {
 			var json = JSON.parse(message.data);
 		} catch (e) {
@@ -81,10 +84,8 @@ $(document).ready(function() {
 			return;
 		}
 
-		if (json.type === 'hellocode') {
-			$("#hellocode").html(json.hellocode);
-		}
-
+		// NOTE: if you're not sure about the JSON structure
+		// check the server source code above
 		if (json.type === 'color') { // first response from the server with user's color
 			myColor = json.data;
 			myName = json.username;

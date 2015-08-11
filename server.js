@@ -11,6 +11,8 @@ var webSocketsServerPort = 1337;
 var webSocketServer = require('websocket').server;
 var http = require('http');
 
+var hellocode = 2015;
+
 /**
  * Global variables
  */
@@ -18,6 +20,10 @@ var http = require('http');
 var history = [];
 // list of currently connected clients (users)
 var clients = [];
+
+var hellocodes = [];
+
+var clienttype = [];
 
 /**
  * Helper function for escaping input strings
@@ -37,29 +43,22 @@ var server = http.createServer(function(request, response) {
 server.listen(webSocketsServerPort, function() {
 	console.log((new Date()) + " Server is listening on port " + webSocketsServerPort);
 });
+var wsServer = new webSocketServer({		httpServer: server});
 
-/**
- * WebSocket server
- */
-var wsServer = new webSocketServer({
-	// WebSocket server is tied to a HTTP server. WebSocket request is just
-	// an enhanced HTTP request. For more info http://tools.ietf.org/html/rfc6455#page-6
-	httpServer: server
-});
 
-// This callback function is called every time someone
-// tries to connect to the WebSocket server
+
+// This callback function is called every time someone tries to connect to the WebSocket server
 wsServer.on('request', function(request) {
 	console.log((new Date()) + ' Connection from origin ' + request.origin + '.');
 
-	// accept connection - you should check 'request.origin' to make sure that
-	// client is connecting from your website
-	// (http://en.wikipedia.org/wiki/Same_origin_policy)
 	var connection = request.accept(null, request.origin);
-	// we need to know client index to remove them on 'close' event
+
+//	console.log(connection);
+
 	var index = clients.push(connection) - 1;
 	var userName = false;
 	var userColor = false;
+	var localhellocode = 0;
 
 	console.log((new Date()) + ' Connection accepted.');
 
@@ -77,18 +76,73 @@ wsServer.on('request', function(request) {
 			if (userName === false) { // first message sent by user is their name
 				// remember user name
 				console.log(message);
-				var tempstring = htmlEntities(message.utf8Data);
-				var temparray = tempstring.split("_");
-				userName = temparray[1];
-				userColor = temparray[2];
 
-				connection.sendUTF(JSON.stringify({
-					type: 'color',
-					username: userName,
-					data: userColor
-				}));
+				if (message.utf8Data=="Desktop Connection")
+				{
+					console.log("Desktop client connected.");
 
-				console.log((new Date()) + ' User is known as: ' + userName + ' with ' + userColor + ' color.');
+					hellocodes[index] = localhellocode;
+					clienttype[index] = "desktop";
+
+				} else
+				if (message.utf8Data=="Mobile Connection")
+				{
+					hellocode++;
+					localhellocode=hellocode;
+
+					console.log("Mobile client connected.");
+					console.log("sending hello code: "+localhellocode);
+
+					var json = JSON.stringify({
+						type: 'hellocode',
+						hellocode : hellocode
+					});
+
+					hellocodes[index] = localhellocode;
+					clienttype[index] = "mobile";
+
+					connection.sendUTF(json);
+
+				} else {
+					var tempstring = htmlEntities(message.utf8Data);
+					var temparray = tempstring.split("_");
+
+					if (temparray[0]=="register")
+					{
+						if (temparray[1] == "desktoplogin")
+						{
+
+							console.log("got "+temparray[2]+" code from desktop, looking for unpaired mobile connection with it.");
+							var foundUnpaired = -1;
+							for (var i=0; i<hellocodes.length; i++ )
+							{
+								if hellocodes[i] == temparray[2])
+								{
+									foundUnpaired=i;
+								}
+							}
+							if (foundUnpaired==-1)
+							{
+								console.log("cant find pair");
+							} else {
+								console.log("found pair");
+							}
+
+							/*
+							userName = temparray[1];
+							userColor = temparray[2];
+
+							connection.sendUTF(JSON.stringify({
+								type: 'color',
+								username: userName,
+								data: userColor
+							}));
+
+							console.log((new Date()) + ' User is known as: ' + userName + ' with ' + userColor + ' color.');
+							*/
+						}
+					}
+				}
 
 			} else { // log and broadcast the message
 
@@ -124,7 +178,7 @@ wsServer.on('request', function(request) {
 						type: 'message',
 						data: obj
 					});
-					
+
 					history.push(obj);
 					history = history.slice(-100);
 				}

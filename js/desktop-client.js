@@ -26,6 +26,12 @@ $(document).ready(function() {
 
 	$('#myModal').modal('show');
 
+	$('#myModal').on('submit', function(e) { //use on if jQuery 1.7+
+        e.preventDefault();  //prevent form from submitting
+		  var mobilecodeinput = $("#inputCode").val();
+		  connection.send("register_desktoplogin_"+mobilecodeinput);
+    });
+
 	// for better performance - to avoid searching in DOM
 	var content = $('#content');
 	var input = $('#input');
@@ -48,12 +54,14 @@ $(document).ready(function() {
 	}
 
 	// open connection
-	var connection = new WebSocket('ws://game.elooi.com:1337');
+	//var connection = new WebSocket('ws://game.elooi.com:1337');
+	var connection = new WebSocket('ws://192.168.1.110:1337');
 
 	connection.onopen = function() {
 		// first we want users to enter their names
 		input.removeAttr('disabled');
 		status.text('Choose name:');
+		connection.send("Desktop Connection");
 	};
 
 	connection.onerror = function(error) {

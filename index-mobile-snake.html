@@ -7,88 +7,98 @@
 
 	<title>Phone - Game Controller</title>
 
-	<script src="js/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 
 	<script src="js/mobile-client.js"></script>
-
-	<link href="css/mobile.css" rel="stylesheet">
-
-	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<script src="js/bootstrap.min.js"></script>
-
 </head>
 
+<style>
+	p {
+		line-height: 18px;
+	}
+
+	#content {
+		font-family: tahoma;
+		font-size: 12px;
+		padding: 5px;
+		background: #ddd;
+		border-radius: 5px;
+		overflow-y: scroll;
+		border: 1px solid #CCC;
+		margin-top: 10px;
+		height: 160px;
+		width: 350px;
+	}
+
+	#input {
+		font-family: tahoma;
+		font-size: 12px;
+		border-radius: 2px;
+		border: 1px solid #ccc;
+		margin-top: 5px;
+		padding: 5px;
+		width: 230px;
+	}
+
+	#status {
+		font-family: tahoma;
+		font-size: 12px;
+		width: 88px;
+		display: inline-block;
+		margin-top: 5px;
+	}
+
+
+	#sensordata {
+		font-family: tahoma;
+		font-size: 12px;
+		padding: 5px;
+		background: #ddd;
+		border-radius: 5px;
+		overflow-y: scroll;
+		border: 1px solid #CCC;
+		margin-top: 10px;
+		height: 80px;
+		width: 350px;
+	}
+
+	.myButton {
+		-moz-box-shadow: 0px 1px 0px 0px #f0f7fa;
+		-webkit-box-shadow: 0px 1px 0px 0px #f0f7fa;
+		box-shadow: 0px 1px 0px 0px #f0f7fa;
+		background-color:#33bdef;
+		-moz-border-radius:6px;
+		-webkit-border-radius:6px;
+		border-radius:6px;
+		border:1px solid #057fd0;
+		display:inline-block;
+		cursor:pointer;
+		color:#ffffff;
+		font-family:Arial;
+		font-size:15px;
+		font-weight:bold;
+		padding:2px 14px;
+		text-decoration:none;
+		text-shadow:0px -1px 0px #5b6178;
+		width:60px;
+		text-align:center;
+		margin-bottom:4px;
+	}
+	.myButton:hover {
+	}
+	.myButton:active {
+		position:relative;
+		top:1px;
+	}
+
+
+
+</style>
 
 <BODY>
 
-	<div style="text-align:center">
-		<div class="roomcontentbox chatroom">
-			<div class="roomtitle">Chat Rooms</div>
-		</div>
-
-		<div class="roomcontentbox snakeroom">
-			<div class="roomtitle">Snake</div>
-		</div>
-
-		<div class="roomcontentbox chessroom">
-			<div class="roomtitle">Chess</div>
-		</div>
-
-		<div class="roomcontentbox tronroom">
-			<div class="roomtitle">Tron</div>
-		</div>
-
-		<div class="roomcontentbox cannonroom">
-			<div class="roomtitle">Cannon</div>
-		</div>
-
-		<div class="roomcontentbox reversiroom">
-			<div class="roomtitle">Reversi</div>
-		</div>
-
-		<div class="roomcontentbox golfroom">
-			<div class="roomtitle">Golf</div>
-		</div>
-
-		<div class="roomcontentbox billardroom">
-			<div class="roomtitle">Billards</div>
-		</div>
-
-		<div class="roomcontentbox dartsroom">
-			<div class="roomtitle">Darts</div>
-		</div>
-
-	</div>
-
-	<!-- Modal -->
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h4 class="modal-title" id="myModalLabel">Connect your phone to play</h4>
-	      </div>
-	      <div class="modal-body">
-	        Please go to game.elooi.com on your phone or tablet and enter the code bellow.
-			  <br><br>
-			  <center><div style="width:100px; height:30px; line-height:30px; border: 1px solid black; border-radius:4px; text-align:center; font-size:16px; font-weight:bold" id="hellocode"></div>
-			  </center>
-			  <br>
-			  <div class="alert alert-warning alert-dismissible" role="alert">
-			  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			  <strong>Note</strong> This dialog will close by itself once you have logged in from your phone.
-			</div>
-	      </div>
-	      <!-- div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary">Save changes</button>
-		  </div -->
-	    </div>
-	  </div>
-	</div>
-
-
 	<div style="vertical-align:top">
-		<!--
+
 		<div style="">
 			<div id="content"></div>
 			<div style="width:362px;">
@@ -115,7 +125,6 @@
 
 			</div>
 		</div>
-		-->
 
 		<div id="sensordata">
 			<div class="box" id="accel">
