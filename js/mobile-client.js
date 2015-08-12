@@ -60,7 +60,7 @@ $(document).ready(function() {
 
 	// open connection
 	//var connection = new WebSocket('ws://game.elooi.com:1337');
-	var connection = new WebSocket('ws://192.168.1.110:1337');
+	var connection = new WebSocket('ws://192.168.1.107:1337');
 
 	connection.onopen = function() {
 		connection.send("Mobile Connection");

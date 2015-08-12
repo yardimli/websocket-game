@@ -60,7 +60,7 @@ wsServer.on('request', function(request) {
 	var userColor = false;
 	var localhellocode = 0;
 
-	console.log((new Date()) + ' Connection accepted.');
+	console.log((new Date()) + ' Connection accepted. User index: '+index);
 
 	// send back chat history
 	if (history.length > 0) {
@@ -116,7 +116,7 @@ wsServer.on('request', function(request) {
 							var foundUnpaired = -1;
 							for (var i=0; i<hellocodes.length; i++ )
 							{
-								if hellocodes[i] == temparray[2])
+								if (hellocodes[i] == temparray[2])
 								{
 									foundUnpaired=i;
 								}
