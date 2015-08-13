@@ -29,7 +29,9 @@ $(document).ready(function() {
 	$('#myModal').on('submit', function(e) { //use on if jQuery 1.7+
         e.preventDefault();  //prevent form from submitting
 		  var mobilecodeinput = $("#inputCode").val();
-		  connection.send("register_desktoplogin_"+mobilecodeinput);
+		  var usernameinput = $("#inputName").val();
+
+		  connection.send(JSON.stringify({ msgtype: 'login', device : 'desktop', hellocode : mobilecodeinput, username : usernameinput }));
     });
 
 	// for better performance - to avoid searching in DOM
@@ -37,7 +39,6 @@ $(document).ready(function() {
 	var input = $('#input');
 	var status = $('#status');
 
-	var myColor = false; //from server
 	var myName = false; //from server
 
 	// if user is running mozilla then use it's built-in WebSocket
@@ -55,13 +56,14 @@ $(document).ready(function() {
 
 	// open connection
 	//var connection = new WebSocket('ws://game.elooi.com:1337');
-	var connection = new WebSocket('ws://192.168.1.107:1337');
+	var connection = new WebSocket('ws://192.168.1.109:1337');
 
 	connection.onopen = function() {
 		// first we want users to enter their names
 		input.removeAttr('disabled');
 		status.text('Choose name:');
-		connection.send("Desktop Connection");
+
+		connection.send(JSON.stringify({ msgtype: 'connection', device : 'desktop' }));
 	};
 
 	connection.onerror = function(error) {
@@ -80,27 +82,35 @@ $(document).ready(function() {
 			return;
 		}
 
-		if (json.type === 'color') { // first response from the server with user's color
-			myColor = json.data;
-			status.text(myName + ': ').css('color', myColor);
+		if (json.msgtype=='error')
+		{
+			alert(json.errorString);
+		} else
+
+		if (json.msgtype === 'color') { // first response from the server with user's color
+			status.text(myName + ': ');
 			input.removeAttr('disabled').focus();
 			// from now user can start sending messages
 		} else
-		if (json.type === 'history') { // entire message history
+
+		if (json.msgtype === 'history') { // entire message history
 			// insert every single message to the chat window
 			for (var i = 0; i < json.data.length; i++) {
 				addMessage(json.data[i].author, json.data[i].text,
 					json.data[i].color, new Date(json.data[i].time));
 			}
 		} else
-		if (json.type === 'message') { // it's a single message
+
+		if (json.msgtype === 'message') { // it's a single message
 			input.removeAttr('disabled'); // let the user write another message
 			addMessage(json.data.author, json.data.text, json.data.color, new Date(json.data.time));
 		} else
-		if (json.type === 'position') { // it's a position
+
+		if (json.msgtype === 'position') { // it's a position
 				input.removeAttr('disabled'); // let the user write another message
 				addCoordinate(json.data.author, json.data.xpos, json.data.ypos, json.data.color);
-		} else {
+		} else
+		{
 			console.log('Hmm..., I\'ve never seen JSON like this: ', json);
 		}
 	};

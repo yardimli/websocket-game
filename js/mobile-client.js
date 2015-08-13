@@ -40,8 +40,6 @@ $(document).ready(function() {
 	var input = $('#input');
 	var status = $('#status');
 
-	// my color assigned by the server
-	var myColor = false;
 	// my name sent to the server
 	var myName = false;
 
@@ -60,10 +58,10 @@ $(document).ready(function() {
 
 	// open connection
 	//var connection = new WebSocket('ws://game.elooi.com:1337');
-	var connection = new WebSocket('ws://192.168.1.107:1337');
+	var connection = new WebSocket('ws://192.168.1.109:1337');
 
 	connection.onopen = function() {
-		connection.send("Mobile Connection");
+		connection.send(JSON.stringify({ msgtype: 'connection', device : 'mobile' }));
 	};
 
 	connection.onerror = function(error) {
@@ -81,30 +79,40 @@ $(document).ready(function() {
 			return;
 		}
 
-		if (json.type === 'hellocode') {
-			$("#hellocode").html(json.hellocode);
-		}
+		if (json.msgtype === 'paired') {
+			$('#myModal').modal('hide');
+		} else
 
-		if (json.type === 'color') { // first response from the server with user's color
-			myColor = json.data;
+
+		if (json.msgtype === 'hellocode') {
+			$("#hellocode").html(json.hellocode);
+		} else
+
+		if (json.msgtype === 'color') { // first response from the server with user's color
 			myName = json.username;
-			status.text(myName + ': ').css('color', myColor);
+			status.text(myName + ': ');
 			input.removeAttr('disabled').focus();
 			input.show();
 			$("#ChooseName").hide();
 
 			// from now user can start sending messages
-		} else if (json.type === 'history') { // entire message history
+		} else
+
+		if (json.msgtype === 'history') { // entire message history
 			// insert every single message to the chat window
 			for (var i = 0; i < json.data.length; i++) {
 				addMessage(json.data[i].author, json.data[i].text,
 					json.data[i].color, new Date(json.data[i].time));
 			}
-		} else if (json.type === 'message') { // it's a single message
+		} else
+
+		if (json.msgtype === 'message') { // it's a single message
 			input.removeAttr('disabled'); // let the user write another message
 			addMessage(json.data.author, json.data.text,
 				json.data.color, new Date(json.data.time));
-		} else if (json.type === 'position') { // it's a coordinate message
+		} else
+
+		if (json.msgtype === 'position') { // it's a coordinate message
 			input.removeAttr('disabled');
 
 		} else {

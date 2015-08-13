@@ -11,57 +11,68 @@ var webSocketsServerPort = 1337;
 var webSocketServer = require('websocket').server;
 var http = require('http');
 
-var hellocode = 2015;
 
-/**
- * Global variables
- */
+// Global variables
+
+
 // latest 100 messages
 var history = [];
+
 // list of currently connected clients (users)
 var clients = [];
+var clientsData = [];
 
-var hellocodes = [];
+var hellocode = 2015;
 
-var clienttype = [];
 
-/**
- * Helper function for escaping input strings
- */
+//--------------------------------------------------------------------------------
+// Helper function for escaping input strings
 function htmlEntities(str) {
 	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;')
 		.replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-
-/**
- * HTTP server
- */
+//--------------------------------------------------------------------------------
+// HTTP server
 var server = http.createServer(function(request, response) {
 	// Not important for us. We're writing WebSocket server, not HTTP server
 });
+
+//--------------------------------------------------------------------------------
 server.listen(webSocketsServerPort, function() {
 	console.log((new Date()) + " Server is listening on port " + webSocketsServerPort);
 });
-var wsServer = new webSocketServer({		httpServer: server});
 
 
 
+
+
+
+//--------------------------------------------------------------------------------
+var wsServer = new webSocketServer({httpServer: server});
+
+
+//--------------------------------------------------------------------------------
 // This callback function is called every time someone tries to connect to the WebSocket server
 wsServer.on('request', function(request) {
+
+	//--------------------------------------------------------------------------------
+	// this part will run only once for each connection and the variables here will be recreated for each user
 	console.log((new Date()) + ' Connection from origin ' + request.origin + '.');
 
 	var connection = request.accept(null, request.origin);
 
 //	console.log(connection);
+	clients.push(connection);
 
-	var index = clients.push(connection) - 1;
-	var userName = false;
-	var userColor = false;
-	var localhellocode = 0;
+	var index = clients.length - 1;
+
+	var isPaired = false;
+	var localhellocode = -1;
 
 	console.log((new Date()) + ' Connection accepted. User index: '+index);
 
+	//--------------------------------------------------------------------------------
 	// send back chat history
 	if (history.length > 0) {
 		connection.sendUTF(JSON.stringify({
@@ -70,83 +81,89 @@ wsServer.on('request', function(request) {
 		}));
 	}
 
-	// user sent some message
+	//--------------------------------------------------------------------------------
+	// message from connected clients
 	connection.on('message', function(message) {
 		if (message.type === 'utf8') { // accept only text
-			if (userName === false) { // first message sent by user is their name
-				// remember user name
-				console.log(message);
+			console.log(message);
 
-				if (message.utf8Data=="Desktop Connection")
+			try {
+				var messagedata = JSON.parse( message.utf8Data );
+			} catch (e) {
+				console.log('This doesn\'t look like a valid JSON: ', message.utf8Data);
+				return;
+			}
+			//if part of message has html should use htmlEntities() on those parameters of the messagedata
+			console.log(messagedata);
+
+			//--------------------------------------------------------------------------------
+			if (messagedata.msgtype=="connection") {
+				if (messagedata.device=="desktop")
 				{
 					console.log("Desktop client connected.");
 
-					hellocodes[index] = localhellocode;
-					clienttype[index] = "desktop";
-
+					clientsData[index] = {hellocode : "-1", clienttype : "desktop", username: "", pairIndex : -1};
 				} else
-				if (message.utf8Data=="Mobile Connection")
+				if (messagedata.device=="mobile")
 				{
 					hellocode++;
 					localhellocode=hellocode;
 
+					clientsData[index] = {hellocode : localhellocode, clienttype : "mobile", username: "", pairIndex : -1};
+
 					console.log("Mobile client connected.");
 					console.log("sending hello code: "+localhellocode);
 
-					var json = JSON.stringify({
-						type: 'hellocode',
-						hellocode : hellocode
-					});
+					connection.sendUTF(JSON.stringify({ msgtype: 'hellocode', hellocode : hellocode }));
 
-					hellocodes[index] = localhellocode;
-					clienttype[index] = "mobile";
-
-					connection.sendUTF(json);
-
-				} else {
-					var tempstring = htmlEntities(message.utf8Data);
-					var temparray = tempstring.split("_");
-
-					if (temparray[0]=="register")
-					{
-						if (temparray[1] == "desktoplogin")
-						{
-
-							console.log("got "+temparray[2]+" code from desktop, looking for unpaired mobile connection with it.");
-							var foundUnpaired = -1;
-							for (var i=0; i<hellocodes.length; i++ )
-							{
-								if (hellocodes[i] == temparray[2])
-								{
-									foundUnpaired=i;
-								}
-							}
-							if (foundUnpaired==-1)
-							{
-								console.log("cant find pair");
-							} else {
-								console.log("found pair");
-							}
-
-							/*
-							userName = temparray[1];
-							userColor = temparray[2];
-
-							connection.sendUTF(JSON.stringify({
-								type: 'color',
-								username: userName,
-								data: userColor
-							}));
-
-							console.log((new Date()) + ' User is known as: ' + userName + ' with ' + userColor + ' color.');
-							*/
-						}
-					}
 				}
+			} else
 
-			} else { // log and broadcast the message
+			if ( (messagedata.msgtype=="login") && (messagedata.device=="desktop") )
+			{
+				if ( (messagedata.hellocode!="") && (messagedata.username!="") )
+				{
+					console.log("got "+messagedata.hellocode+" code from desktop with username " + messagedata.username + ", looking for unpaired mobile connection with it.");
 
-				// we want to keep history of all sent messages
+					var foundUnpaired = -1;
+					for (var i=0; i<clientsData.length; i++ )
+					{
+						if (clientsData[i].hellocode == messagedata.hellocode) { foundUnpaired=i; }
+					}
+
+					if (foundUnpaired==-1)
+					{
+						console.log("cant find pair");
+						connection.sendUTF(JSON.stringify({
+							msgtype: 'error',
+							errorString: "Error. Can't find code. Please verify it is the same as on your phone."
+						}));
+
+					} else {
+						console.log("found pair");
+						clientsData[foundUnpaired].username = messagedata.username;
+
+						clientsData[foundUnpaired].pairIndex = index;
+						clientsData[index].pairIndex = foundUnpaired;
+
+						connection.sendUTF(JSON.stringify({ msgtype: 'success', msgstring: "Pairing complete. Sending messgae to phone now." }));
+
+						clients[foundUnpaired].sendUTF(JSON.stringify({ msgtype: 'paired', msgstring: "Pairing complete." }));
+
+						console.log((new Date()) + ' User is known as: ' + clientsData[foundUnpaired].username);
+					}
+				} else {
+					connection.sendUTF(JSON.stringify({
+						msgtype: 'error',
+						errorString: "Error. Please type in both code and username."
+					}));
+				}
+			} else
+			//--------------------------------------------------------------------------------
+			// username is set
+			{ // log and broadcast the message
+
+				//coordinate messages will not be added to history
 				var xmsg = htmlEntities(message.utf8Data);
 				if (xmsg.indexOf("xy_")==0)
 				{
@@ -156,8 +173,7 @@ wsServer.on('request', function(request) {
 						time: (new Date()).getTime(),
 						xpos: xmsgarray[1],
 						ypos: xmsgarray[2],
-						author: userName,
-						color: userColor
+						author: userName
 					};
 
 					var json = JSON.stringify({
@@ -165,13 +181,14 @@ wsServer.on('request', function(request) {
 						data: obj
 					});
 
-				} else {
+				} else
+				//keep history of all sent messages
+				{
 					console.log((new Date()) + ' Received Message from ' + userName + ': ' + message.utf8Data);
 					var obj = {
 						time: (new Date()).getTime(),
 						text: htmlEntities(message.utf8Data),
-						author: userName,
-						color: userColor
+						author: userName
 					};
 
 					var json = JSON.stringify({
@@ -192,13 +209,17 @@ wsServer.on('request', function(request) {
 		}
 	});
 
+	//--------------------------------------------------------------------------------
 	// user disconnected
 	connection.on('close', function(connection) {
-		if (userName !== false && userColor !== false) {
+		console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");
+		/*
+		if (userName !== false) {
 			console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");
 			// remove user from the list of connected clients
 			clients.splice(index, 1);
 		}
+		*/
 	});
 
 });
