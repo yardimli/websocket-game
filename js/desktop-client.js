@@ -32,7 +32,7 @@ $(document).ready(function() {
 	var input = $('#input');
 	var status = $('#status');
 
-//	$('#LoginModal').modal('show');
+	$('#LoginModal').modal('show');
 
 	$('#MessageModal').on('hidden.bs.modal', function () {
 		if (ReloadPageOnMessageClose) {
