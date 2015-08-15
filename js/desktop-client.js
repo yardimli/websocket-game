@@ -22,11 +22,29 @@ var UsersLastY = [];
 
 var ShowCircle = 10;
 
+var ReloadPageOnMessageClose = false;
+var UnhideLoginModal = false;
+
 $(document).ready(function() {
 
-	$('#myModal').modal('show');
+	// for better performance - to avoid searching in DOM
+	var content = $('#content');
+	var input = $('#input');
+	var status = $('#status');
 
-	$('#myModal').on('submit', function(e) { //use on if jQuery 1.7+
+//	$('#LoginModal').modal('show');
+
+	$('#MessageModal').on('hidden.bs.modal', function () {
+		if (ReloadPageOnMessageClose) {
+			window.location.replace("http://localhost/websocket-game/index-desktop.html");
+		}
+		if (UnhideLoginModal) {
+			$('#LoginModal').modal('show');
+			UnhideLoginModal = false;
+		}
+	})
+
+	$('#LoginModal').on('submit', function(e) { //use on if jQuery 1.7+
         e.preventDefault();  //prevent form from submitting
 		  var mobilecodeinput = $("#inputCode").val();
 		  var usernameinput = $("#inputName").val();
@@ -34,10 +52,28 @@ $(document).ready(function() {
 		  connection.send(JSON.stringify({ msgtype: 'login', device : 'desktop', hellocode : mobilecodeinput, username : usernameinput }));
     });
 
-	// for better performance - to avoid searching in DOM
-	var content = $('#content');
-	var input = $('#input');
-	var status = $('#status');
+	 $('#ChatRoomLink').on('click', function() {
+		 $("#RoomsMenu").fadeOut('fast');
+		 $("#ChatRoom").fadeIn('fast');
+	 });
+
+	 //Send mesage when user presses Enter key
+ 	input.keydown(function(e) {
+ 		if (e.keyCode === 13) {
+ 			var msg = $(this).val();
+ 			if (!msg) {
+ 				return;
+ 			}
+
+ 			connection.send(msg);
+ 			$(this).val('');
+ 			input.attr('disabled', 'disabled');
+
+ 			// we know that the first message sent from a user their name
+ 			if (myName === false) {	myName = msg; }
+ 		}
+ 	});
+
 
 	var myName = false; //from server
 
@@ -59,18 +95,13 @@ $(document).ready(function() {
 	var connection = new WebSocket('ws://192.168.1.109:1337');
 
 	connection.onopen = function() {
-		// first we want users to enter their names
-		input.removeAttr('disabled');
-		status.text('Choose name:');
-
 		connection.send(JSON.stringify({ msgtype: 'connection', device : 'desktop' }));
 	};
 
 	connection.onerror = function(error) {
-		// just in there were some problems with conenction...
-		content.html($('<p>', {
-			text: 'Sorry, but there\'s some problem with your ' + 'connection or the server is down.'
-		}));
+		$("#MessageModalTitle").html("Error");
+		$("#MessageModalBody").html('Sorry, but there\'s some problem with your connection or the server is down.');
+		$("#MessageModal").modal('show');
 	};
 
 	// most important part - incoming messages
@@ -84,14 +115,32 @@ $(document).ready(function() {
 
 		if (json.msgtype=='error')
 		{
-			alert(json.errorString);
+			if (($("#LoginModal").data('bs.modal') || {}).isShown) {
+				$('#LoginModal').modal('hide');
+				UnhideLoginModal = true;
+			}
+
+			$("#MessageModalTitle").html("Error");
+			$("#MessageModalBody").html(json.msgstring);
+			$("#MessageModal").modal('show');
 		} else
 
-		if (json.msgtype === 'color') { // first response from the server with user's color
-			status.text(myName + ': ');
-			input.removeAttr('disabled').focus();
-			// from now user can start sending messages
+		if (json.msgtype=='disconnected')
+		{
+			$("#MessageModalTitle").html("Warning");
+			$("#MessageModalBody").html(json.msgstring);
+			$("#MessageModal").modal('show');
+			ReloadPageOnMessageClose = true;
 		} else
+
+		if (json.msgtype === 'paired') {
+			$('#LoginModal').modal('hide');
+
+			$("#MessageModalTitle").html("Info");
+			$("#MessageModalBody").html(json.msgstring);
+			$("#MessageModal").modal('show');
+		} else
+
 
 		if (json.msgtype === 'history') { // entire message history
 			// insert every single message to the chat window
@@ -114,23 +163,6 @@ $(document).ready(function() {
 			console.log('Hmm..., I\'ve never seen JSON like this: ', json);
 		}
 	};
-
-	//Send mesage when user presses Enter key
-	input.keydown(function(e) {
-		if (e.keyCode === 13) {
-			var msg = $(this).val();
-			if (!msg) {
-				return;
-			}
-
-			connection.send(msg);
-			$(this).val('');
-			input.attr('disabled', 'disabled');
-
-			// we know that the first message sent from a user their name
-			if (myName === false) {	myName = msg; }
-		}
-	});
 
 	//If the server wasn't able to respond to the 3 seconds then show some error message to notify the user that something is wrong.
 	setInterval(function() {

@@ -9,16 +9,37 @@
 	<script src="js/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
 
 	<script src="js/desktop-client.js"></script>
-	<link href="css/desktop.css" rel="stylesheet">
 
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<script src="js/bootstrap.min.js"></script>
 
+	<link href="css/desktop.css" rel="stylesheet">
+
+
 </head>
 
 <BODY>
-	<div style="text-align:center">
-		<div class="roomcontentbox chatroom">
+
+	<!-- Fixed navbar -->
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index-desktop.html">Websockets Game Engine - Desktop</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#">Home</a></li>
+					<li><a href="#about">About</a></li>
+					<li><a href="#contact">Contact</a></li>
+				</ul>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</nav>
+
+
+	<div style="text-align:center; padding-top:50px;" ID="RoomsMenu">
+		<div class="roomcontentbox chatroom" id="ChatRoomLink">
 			<div class="roomtitle">Chat Rooms</div>
 		</div>
 
@@ -53,11 +74,22 @@
 		<div class="roomcontentbox dartsroom">
 			<div class="roomtitle">Darts</div>
 		</div>
-
 	</div>
 
+	<div id="ChatRoom" style="display:none;  padding-top:50px;">
+		<div style="vertical-align:top">
+			<div id="content"></div>
+			<div>
+				<span id="status">Connecting...</span>
+				<input type="text" id="input" disabled="disabled" />
+			</div>
+		</div>
+	</div>
+
+
+
 	<!-- Modal -->
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static"  data-keyboard="false">
+	<div class="modal" id="LoginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -93,41 +125,29 @@
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
-						<strong>Note</strong> Your phone will automatically login.
+						<strong>Note</strong> Your phone will automatically login once the pairing is completed.
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!--
-	<div style="vertical-align:top">
-		<div id="content"></div>
-		<div>
-			<span id="status">Connecting...</span>
-			<input type="text" id="input" disabled="disabled" />
-		</div>
-	</div
 
-	<div style="width:600px; font-family: tahoma; font-size: 12px;">
-		<br>
-		Choose the player to track:
-		<div style="padding:4px; display:block; text-align:center;" id="ChooseName">
-			<a href="#" class="myButton" id="name_Leonore_red" style="background-color:red">Leonore</a>
-			<a href="#" class="myButton" id="name_Ekim_blue" style="background-color:blue">Ekim</a>
-			<a href="#" class="myButton" id="name_Ege_green" style="background-color:green">Ege</a>
-			<a href="#" class="myButton" id="name_Smith_brown" style="background-color:brown">Smith</a>
-			<a href="#" class="myButton" id="name_Linda_magenta" style="background-color:magneta">Linda</a>
-			<a href="#" class="myButton" id="name_Johnson_gray" style="background-color:gray">Johnson</a>
-			<a href="#" class="myButton" id="name_Dorothy_pink" style="background-color:pink">Dorothy</a>
-			<a href="#" class="myButton" id="name_Nancy_indigo" style="background-color:indigo">Nancy</a>
-			<a href="#" class="myButton" id="name_Michael_darkorchid" style="background-color:DarkOrchid">Michael</a>
-			<a href="#" class="myButton" id="name_Susan_burlywood" style="background-color:BurlyWood">Susan</a>
-			<a href="#" class="myButton" id="name_George_chocolate" style="background-color:Chocolate">George</a>
-			<a href="#" class="myButton" id="name_Donna_crimson" style="background-color:Crimson">Donna</a>
+	<div class="modal" id="MessageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="MessageModalTitle">...</h4>
+				</div>
+				<div class="modal-body" id="MessageModalBody">
+					...
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
 		</div>
-
 	</div>
-	 -->
+
 
 
 </body>

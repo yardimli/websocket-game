@@ -102,14 +102,14 @@ wsServer.on('request', function(request) {
 				{
 					console.log("Desktop client connected.");
 
-					clientsData[index] = {hellocode : "-1", clienttype : "desktop", username: "", pairIndex : -1};
+					clientsData[index] = {hellocode : "-1", clienttype : "desktop", username: "", pairIndex : -1, isOnline : true};
 				} else
 				if (messagedata.device=="mobile")
 				{
 					hellocode++;
 					localhellocode=hellocode;
 
-					clientsData[index] = {hellocode : localhellocode, clienttype : "mobile", username: "", pairIndex : -1};
+					clientsData[index] = {hellocode : localhellocode, clienttype : "mobile", username: "", pairIndex : -1, isOnline : true};
 
 					console.log("Mobile client connected.");
 					console.log("sending hello code: "+localhellocode);
@@ -123,39 +123,51 @@ wsServer.on('request', function(request) {
 			{
 				if ( (messagedata.hellocode!="") && (messagedata.username!="") )
 				{
-					console.log("got "+messagedata.hellocode+" code from desktop with username " + messagedata.username + ", looking for unpaired mobile connection with it.");
+					console.log("Got "+messagedata.hellocode+" code from desktop with username " + messagedata.username);
+					console.log("Looking for unpaired mobile connection with it.");
 
 					var foundUnpaired = -1;
+					var foundPairedError = false;
 					for (var i=0; i<clientsData.length; i++ )
 					{
-						if (clientsData[i].hellocode == messagedata.hellocode) { foundUnpaired=i; }
+						if ( (clientsData[i].hellocode == messagedata.hellocode) && (clientsData[i].isOnline) )  {
+							if (clientsData[i].pairIndex == -1) { foundUnpaired=i;  } else { foundPairedError = true; }
+
+						}
 					}
 
 					if (foundUnpaired==-1)
 					{
-						console.log("cant find pair");
-						connection.sendUTF(JSON.stringify({
-							msgtype: 'error',
-							errorString: "Error. Can't find code. Please verify it is the same as on your phone."
-						}));
-
+						console.log("Can't find pair");
+						if (foundPairedError) {
+							connection.sendUTF(JSON.stringify({
+								msgtype: 'error',
+								msgstring: "Error. Code is already paired with another user."
+							}));
+						} else {
+							connection.sendUTF(JSON.stringify({
+								msgtype: 'error',
+								msgstring: "Error. Can't find code. Please verify it is the same as on your phone."
+							}));
+						}
 					} else {
-						console.log("found pair");
+						console.log("Found pair on index: "+foundUnpaired);
 						clientsData[foundUnpaired].username = messagedata.username;
 
 						clientsData[foundUnpaired].pairIndex = index;
 						clientsData[index].pairIndex = foundUnpaired;
 
-						connection.sendUTF(JSON.stringify({ msgtype: 'success', msgstring: "Pairing complete. Sending messgae to phone now." }));
+						connection.sendUTF(JSON.stringify({ msgtype: 'paired', msgstring: "Pairing complete." }));
 
 						clients[foundUnpaired].sendUTF(JSON.stringify({ msgtype: 'paired', msgstring: "Pairing complete." }));
+						clients[foundUnpaired].sendUTF(JSON.stringify({ msgtype: 'updatename', msgstring: messagedata.username }));
 
 						console.log((new Date()) + ' User is known as: ' + clientsData[foundUnpaired].username);
 					}
 				} else {
 					connection.sendUTF(JSON.stringify({
 						msgtype: 'error',
-						errorString: "Error. Please type in both code and username."
+						msgstring: "Error. Please type in both code and username."
 					}));
 				}
 			} else
@@ -212,7 +224,17 @@ wsServer.on('request', function(request) {
 	//--------------------------------------------------------------------------------
 	// user disconnected
 	connection.on('close', function(connection) {
-		console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");
+		console.log((new Date()) + " Peer " +  connection.remoteAddress + " with index "+ index +" disconnected.");
+
+		clientsData[index].isOnline = false;
+		var pairIndex = clientsData[index].pairIndex;
+		console.log("pair index: "+ pairIndex );
+
+		if (pairIndex!=-1)
+		{
+			clientsData[ pairIndex ].isOnline = false;
+			clients[ pairIndex ].sendUTF(JSON.stringify({ msgtype: 'disconnected', msgstring: "Pair disconnected." }));
+		}
 		/*
 		if (userName !== false) {
 			console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");

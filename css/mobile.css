@@ -1,3 +1,8 @@
+body {
+	background-color: #e9e9e9;
+}
+
+
 #content p {
 	font-family: tahoma;
 	font-size: 12px;
@@ -94,20 +99,20 @@
 
 	vertical-align: top;
 
-	width:45%;
-	height:80px;
+	width:250px;
+	height:250px;
 	padding:2px;
-	margin:5px;
+	margin: 20px auto;
 
-	display:inline-block;
 }
 
 
 .roomtitle {
 	-webkit-text-stroke: 1px rgb(167, 167, 167);
 	color: rgb(67, 67, 67);
-	font-size: 25px;
+	font-size: 35px;
 	text-shadow: rgb(46, 46, 46) 0px 4px 5px;
+	margin-left:10px;
 }
 
 .dartsroom {
@@ -165,14 +170,14 @@
 
 .snakeroom {
 	background-image: url('../images/37121261.jpg');
-	background-size: 60%;
+	background-size: 100%;
 	background-repeat: no-repeat;
-	background-position: bottom;
+	background-position: center;
 }
 
 .chatroom {
 	background-image: url('../images/37395512.jpg');
-	background-size: 80%;
+	background-size: 100%;
 	background-repeat: no-repeat;
 	background-position: center;
 }

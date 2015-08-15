@@ -1,3 +1,21 @@
+"use strict";
+
+function positionModals(e) {
+	 var $this = $(this).css('display', 'block'),
+		  $window = $(window),
+		  $dialog = $this.find('.modal-dialog'),
+		  offset = ($window.height() - $window.scrollTop() - $dialog.height()) / 2,
+		  marginBottom = parseInt($dialog.css('margin-bottom'), 10);
+
+	 $dialog.css('margin-top', offset < marginBottom ? marginBottom : offset);
+}
+
+$(document).on('show.bs.modal', '.modal', positionModals);
+
+$(window).on('resize', function(e) {
+	 $('.modal:visible').each(positionModals);
+});
+
 // Position Variables
 var x = 0;
 var y = 0;
@@ -31,9 +49,19 @@ var alpha = 0;
 var beta = 0;
 var gamma = 0;
 
+var ReloadPageOnMessageClose = false;
+
+
 $(document).ready(function() {
 
-	$('#myModal').modal('show');
+	$('#PassCodeModal').modal('show');
+
+	$('#MessageModal').on('hidden.bs.modal', function () {
+		if (ReloadPageOnMessageClose) {
+			window.location.replace("http://localhost/websocket-game/index-mobile.html");
+		}
+	})
+
 
 	// for better performance - to avoid searching in DOM
 	var content = $('#content');
@@ -66,9 +94,9 @@ $(document).ready(function() {
 
 	connection.onerror = function(error) {
 		// just in there were some problems with conenction...
-		content.html($('<p>', {
-			text: 'Sorry, but there\'s some problem with your ' + 'connection or the server is down.'
-		}));
+		$("#MessageModalTitle").html("Warning");
+		$("#MessageModalBody").html('Sorry, but there\'s some problem with your connection or the server is down.');
+		$("#MessageModal").modal('show');
 	};
 
 	connection.onmessage = function(message) {
@@ -79,10 +107,34 @@ $(document).ready(function() {
 			return;
 		}
 
-		if (json.msgtype === 'paired') {
-			$('#myModal').modal('hide');
+		if (json.msgtype=='updatename')
+		{
+			$("#DesktopName").html(json.msgstring);
 		} else
 
+		if (json.msgtype=='error')
+		{
+			$("#MessageModalTitle").html("Error");
+			$("#MessageModalBody").html(json.msgstring);
+			$("#MessageModal").modal('show');
+		} else
+
+		if (json.msgtype=='disconnected')
+		{
+			ReloadPageOnMessageClose = true;
+			$("#MessageModalTitle").html("Warning");
+			$("#MessageModalBody").html(json.msgstring);
+			$("#MessageModal").modal('show');
+		} else
+
+		if (json.msgtype === 'paired') {
+			$('#PassCodeModal').modal('hide');
+
+			$("#MessageModalTitle").html("Info");
+			$("#MessageModalBody").html(json.msgstring);
+			$("#MessageModal").modal('show');
+
+		} else
 
 		if (json.msgtype === 'hellocode') {
 			$("#hellocode").html(json.hellocode);

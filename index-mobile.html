@@ -11,17 +11,20 @@
 
 	<script src="js/mobile-client.js"></script>
 
-	<link href="css/mobile.css" rel="stylesheet">
-
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<script src="js/bootstrap.min.js"></script>
 
+	<link href="css/mobile.css" rel="stylesheet">
 </head>
 
 
 <BODY>
 
-	<div style="text-align:center">
+	<div>
+		<div class="roomcontentbox" style="height:80px;">
+			<div class="roomtitle" id="DesktopName">...</div>
+		</div>
+
 		<div class="roomcontentbox chatroom">
 			<div class="roomtitle">Chat Rooms</div>
 		</div>
@@ -61,31 +64,44 @@
 	</div>
 
 	<!-- Modal -->
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h4 class="modal-title" id="myModalLabel">Connect your phone to play</h4>
-	      </div>
-	      <div class="modal-body">
-	        Please go to game.elooi.com on your phone or tablet and enter the code bellow.
-			  <br><br>
-			  <center><div style="width:100px; height:30px; line-height:30px; border: 1px solid black; border-radius:4px; text-align:center; font-size:16px; font-weight:bold" id="hellocode"></div>
-			  </center>
-			  <br>
-			  <div class="alert alert-warning alert-dismissible" role="alert">
-			  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			  <strong>Note</strong> This dialog will close by itself once you have logged in from your phone.
+	<div class="modal" id="PassCodeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel">Connect your phone to play</h4>
+				</div>
+				<div class="modal-body">
+					Please go to game.elooi.com on your desktop or tablet and enter the code bellow.
+					<br>
+					<br>
+					<center>
+						<div style="width:100px; height:30px; line-height:30px; border: 1px solid black; border-radius:4px; text-align:center; font-size:16px; font-weight:bold" id="hellocode"></div>
+					</center>
+					<br>
+					<div class="alert alert-warning alert-dismissible" role="alert">
+						<strong>Note</strong> This dialog will close by itself once you have logged in from your pc.
+					</div>
+				</div>
 			</div>
-	      </div>
-	      <!-- div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary">Save changes</button>
-		  </div -->
-	    </div>
-	  </div>
+		</div>
 	</div>
 
+
+	<div class="modal" id="MessageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="MessageModalTitle">...</h4>
+				</div>
+				<div class="modal-body" id="MessageModalBody">
+					...
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<div style="vertical-align:top">
 		<!--
